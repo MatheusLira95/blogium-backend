@@ -23,7 +23,12 @@ app.get("/posts", (req, resp) => {
   resp.send(posts);
 });
 
-app.post("/new-story", (req, res) => {
+app.get("/posts/:id", (req, resp) => {
+  const id = parseInt(req.params.id);
+  resp.send(posts.find((post) => post.id === id));
+});
+
+app.post("/posts", (req, res) => {
   const newPost = req.body;
   newPost.commentCount = 0;
   newPost.id = posts.length + 1;
