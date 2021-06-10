@@ -6,6 +6,14 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+const comments = [
+  {
+    id: 1,
+    postId: 1,
+    author: "João",
+    content: "Muito bom esse post! Tá de parabéns",
+  },
+];
 const posts = [
   {
     id: 1,
@@ -14,18 +22,32 @@ const posts = [
     contentPreview: "Esta é a estrutura de um post esperado pelo front-end",
     content:
       "Este é o conteúdo do post, o que realmente vai aparecer na página do post...",
-    commentCount: 2,
   },
 ];
 
 app.get("/posts", (req, resp) => {
   console.log("requisição feita de novo mias!");
+  for (let i = 0; i < posts.length; i++) {
+    let counter = 0;
+    for (let j = 0; j < comments.length; j++) {
+      if (comments[j].postId === posts[i].id) {
+        counter++;
+      }
+    }
+    posts[i].commentCount = counter;
+  }
   resp.send(posts);
 });
 
 app.get("/posts/:id", (req, resp) => {
   const id = parseInt(req.params.id);
   resp.send(posts.find((post) => post.id === id));
+});
+
+app.get("/posts/:id/comments", (req, resp) => {
+  const postId = parseInt(req.params.id);
+  const postComments = comments.filter((comment) => comment.postId === postId);
+  resp.send(postComments);
 });
 
 app.post("/posts", (req, res) => {
