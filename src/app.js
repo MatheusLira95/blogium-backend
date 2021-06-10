@@ -49,13 +49,19 @@ app.get("/posts/:id/comments", (req, resp) => {
   const postComments = comments.filter((comment) => comment.postId === postId);
   resp.send(postComments);
 });
+app.post("/posts/:id/comments", (req, resp) => {
+  const newComment = req.body;
+  newComment.id = comments.length + 1;
+  comments.push(newComment);
+  resp.send(newComment);
+});
 
-app.post("/posts", (req, res) => {
+app.post("/posts", (req, resp) => {
   const newPost = req.body;
   newPost.commentCount = 0;
   newPost.id = posts.length + 1;
   posts.push(newPost);
-  res.send(posts);
+  resp.send(posts);
 });
 
 app.listen(4000);
